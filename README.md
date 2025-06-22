@@ -29,6 +29,17 @@ Amacımız, kullanıcıların Türkçe tarih sorularına Wikipedia verilerine da
 
 ## 🧩 Kurulum
 
+> ⚠️ **Uyarı:** Bu proje yalnızca **Python 3.10** sürümüyle test edilmiştir.  
+> Daha yeni sürümlerde (örn. Python 3.11 veya 3.12) bazı bağımlılıkların çalışmaması mümkündür.  
+> Lütfen `conda` veya `pyenv` gibi bir araçla Python 3.10 ortamı oluşturunuz.
+
+### Conda Ortamı Oluşturma (Önerilen)
+
+```bash
+conda create -n chatbot-tarih-qa python=3.10
+conda activate chatbot-tarih-qa
+```
+
 ### 1. Reponun Klonlanması
 
 ```bash
@@ -70,24 +81,14 @@ https://dumps.wikimedia.org/trwiki/latest/trwiki-latest-pages-articles.xml.bz2
 
 Wikipedia XML dump dosyasını işlemek için [WikiExtractor](https://github.com/attardi/wikiextractor) aracını kullanabilirsiniz. Aşağıdaki adımları takip edin:
 
-#### WikiExtractor'ı klonlayın
-```bash
-git clone https://github.com/attardi/wikiextractor.git
-cd wikiextractor
-```
-
-#### Gereksinimleri yükleyin
-```bash
-pip install -r requirements.txt
-```
 #### Wikipedia verisini işleyin ve çıktı olarak JSONL belgeleri üretin
 ```bash
-python WikiExtractor.py \
-  -o ../data/extracted \
+wikiextractor \
+  -o ./data/extracted \
   --json \
   --processes 4 \
   --bytes 100M \
-  ../data/raw/trwiki-latest-pages-articles.xml.bz2
+  ./data/raw/trwiki-latest-pages-articles.xml.bz2
 ```
 Bu işlem sonucunda data/extracted/ klasöründe .jsonl uzantılı birçok belge dosyası oluşacaktır.
 Bu belgeler, embedding işlemiyle vektör veritabanına dönüştürülerek chatbot sisteminde kullanılacaktır.

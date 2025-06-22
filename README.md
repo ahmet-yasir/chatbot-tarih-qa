@@ -49,6 +49,10 @@ cd chatbot-tarih-qa
 
 ### 2. Gerekli Kütüphanelerin Kurulumu
 
+> ⚠️ **Not:** FAISS kütüphanesi bu projede zorunludur.  
+> `requirements.txt` dosyasına `faiss-cpu` eklenmiştir.  
+> Eğer CUDA destekli bir sistem kullanıyorsanız, `faiss-cpu` yerine `faiss-gpu` kurmanız gerekebilir.
+
 ```bash
 pip install -r requirements.txt
 ```

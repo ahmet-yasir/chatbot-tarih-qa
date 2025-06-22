@@ -32,7 +32,7 @@ Amacımız, kullanıcıların Türkçe tarih sorularına Wikipedia verilerine da
 ### 1. Reponun Klonlanması
 
 ```bash
-git clone https://github.com/kullanici/chatbot-tarih-qa.git
+git clone https://github.com/ahmet-yasir/chatbot-tarih-qa.git
 cd chatbot-tarih-qa
 ```
 

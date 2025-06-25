@@ -109,13 +109,13 @@ python scripts/convert_txt_to_jsonl.py
 ```
 Bu script ile data/extracted/ klasörüne her paragraf ayrı bir .jsonl satırı olarak kaydedilir.
 
-### Yöntem 2: Hazır Veri Seti (Kaggle veya Drive)
+### Yöntem 2: Hazır Veri Seti (Kaggle)
 Zaman kazanmak için önceden hazırlanmış .jsonl formatındaki Cumhuriyet tarihi veri setini doğrudan indirebilirsiniz.
 
-### Hazır JSONL Veri Seti - Kaggle
+#### Hazır JSONL Veri Seti - Kaggle
 Zaman kazanmak için önceden hazırlanmış .jsonl formatındaki Cumhuriyet tarihi veri setini doğrudan indirebilirsiniz.
 
-<a href="https://www.kaggle.com/datasets/ayasir/cumhuriyet-tarihi-belgeleri" target="_blank">Hazır JSONL veri seti - Kaggle</a>
+<a href="https://www.kaggle.com/datasets/ayasir/cumhuriyet-tarihi-belgeleri" target="_blank">Kaggle</a>
 
 İndirdikten sonra data/extracted/ klasörüne yerleştirmeniz yeterlidir:
 
@@ -142,11 +142,11 @@ streamlit run app/streamlit_app.py
 ```
 Komut çalıştırıldıktan sonra tarayıcınızda otomatik olarak bir arayüz açılır. Bu arayüz üzerinden sorularınızı sorabilirsiniz.
 
-## 🧪 Örnek Kullanım
+## Örnek Kullanım
 
 Aşağıda uygulamanın çalışma örneğini görebilirsiniz:
 
-### 🖼️ Ekran Görüntüsü
+### Ekran Görüntüsü
 
 ![Chatbot Ekran Görüntüsü](screenshots/ornek.png)
 

@@ -17,25 +17,25 @@ Streamlit arayüzü üzerinden çalışan sistem; Vikipedi'den alınan Cumhuriye
 ---
 
 ##  Proje Yapısı
-chatbot-tarih-qa/
-├── app/
-│ ├── document_loader.py
-│ ├── retriever.py
-│ ├── llm_setup.py
-│ └── streamlit_app.py
-├── build_vector_index.py
-├── scripts/
-│ ├── download_from_wikipedia.py
-│ ├── extract_paragraphs.py
-│ └── convert_txt_to_jsonl.py
-├── data/
-│ ├── raw/
-│ ├── processed/
-│ └── extracted/
-├── vectorstore/
-├── .env
-├── requirements.txt
-└── README.md
+chatbot-tarih-qa/  
+├── app/  
+│ ├── document_loader.py  
+│ ├── retriever.py  
+│ ├── llm_setup.py  
+│ └── streamlit_app.py  
+├── build_vector_index.py  
+├── scripts/  
+│ ├── download_from_wikipedia.py  
+│ ├── extract_paragraphs.py  
+│ └── convert_txt_to_jsonl.py  
+├── data/  
+│ ├── raw/  
+│ ├── processed/  
+│ └── extracted/  
+├── vectorstore/  
+├── .env  
+├── requirements.txt  
+└── README.md  
 
 ##  Kurulum
 

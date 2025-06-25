@@ -33,6 +33,7 @@ chatbot-tarih-qa/
 │ ├── processed/  
 │ └── extracted/  
 ├── vectorstore/  
+├── screenshots/  
 ├── .env  
 ├── requirements.txt  
 └── README.md  

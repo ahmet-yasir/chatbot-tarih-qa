@@ -3,72 +3,81 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import streamlit as st
+from dotenv import load_dotenv
 from app.retriever import load_vectorstore
 from app.llm_setup import get_llm
-from dotenv import load_dotenv
 
+# Ortam değişkenlerini yükle (.env içindeki GEMINI_API_KEY)
 load_dotenv()
 
-# === FAISS indeks yolunu tanımla ===
+# FAISS indeks dizini
 VECTORSTORE_PATH = "vectorstore/faiss_index"
 
-# === Başlat ===
-st.set_page_config(page_title="Tarih Chatbot", layout="wide")
-st.title("📜 Türkçe Tarih Chatbot")
-st.markdown("Tarihle ilgili sorularınızı sorun. Wikipedia tabanlı LLM yanıtlasın.")
+# Streamlit ayarları
+st.set_page_config(page_title="🇹🇷 Cumhuriyet Tarihi Chatbot", layout="wide")
+st.title("📜 Cumhuriyet Tarihi Chatbot")
+st.markdown("Cumhuriyet tarihiyle ilgili sorularınızı aşağıya yazın. Sistem, Wikipedia kaynaklarını kullanarak cevap üretecektir.")
 
-# === Soru al ===
-question = st.text_input("❓ Soru:", placeholder="Örn: Tanzimat Fermanı ne zaman ilan edildi?")
+# Kullanıcıdan soru al
+question = st.text_input("❓ Sorunuz:", placeholder="Örn: 1980 darbesi ne zaman gerçekleşti?")
 
 if question:
-    with st.spinner("🔍 Yanıt aranıyor..."):
+    with st.spinner("🔍 Yanıt hazırlanıyor..."):
         # 1. Vektör veritabanını yükle
         vectorstore = load_vectorstore(VECTORSTORE_PATH)
-        retriever = vectorstore.as_retriever(search_kwargs={"k": 3})
+        retriever = vectorstore.as_retriever(search_kwargs={"k": 5})
         docs = retriever.get_relevant_documents(question)
 
-        # 2. Gemini için prompt oluştur
-        context = "\n\n".join([doc.page_content for doc in docs])
-        # Her belgeyi ayrı olarak kaynak göstererek yapılandıralım
-        sources = []
-        for i, doc in enumerate(docs):
-            sources.append(f"[{i+1}] {doc.page_content.strip()}")
+        # 2. Kaynakları hazırlama
+        sources = [f"[{i+1}] {doc.page_content.strip()}" for i, doc in enumerate(docs)]
         source_text = "\n\n".join(sources)
 
-        prompt = f"""Aşağıda numaralanmış bazı kaynak metinler verilmiştir. Bu kaynaklara dayanarak kullanıcı sorusunu Türkçe olarak, mümkünse kaynak numarası vererek yanıtla. Cevabın başında kısa bir özet, ardından detaylı açıklama olsun.
+        # 3. Sistem prompt (Gemini için detaylı)
+        prompt = f"""
+Sen bir Cumhuriyet tarihi uzmanı gibi davranan Türkçe dilinde konuşan bir yapay zekasın.
 
-        Kaynaklar:
-        {source_text}
+Aşağıda Türkiye Cumhuriyeti tarihine ait Wikipedia kaynaklarından alınmış numaralandırılmış paragraflar bulunmaktadır. 
+Görevin, yalnızca bu kaynaklara dayanarak kullanıcının sorduğu soruya **Türkçe** olarak cevap vermektir.
 
-        Soru: {question}
-        Yanıt (kaynak numarasıyla belirt):"""
+### KURALLAR:
+- Cevabın **başında kısa ve öz bir özet**, ardından **ayrıntılı açıklama** olsun.
+- Yalnızca **verilen kaynak paragraflarına dayanarak** yanıt ver. Tahmin yürütme, dış bilgi ekleme.
+- **Kaynak numaralarını mutlaka belirt.** Örneğin: “(bkz: [1])” gibi.
+- Eğer sorunun cevabı kaynaklar içinde yer almıyorsa bunu açıkça belirt: “Verilen kaynaklarda bu soruya doğrudan bir yanıt bulunmamaktadır.”
+- Gerektiğinde paragrafları birleştirerek kapsamlı ama tutarlı bir yanıt oluştur.
 
+### KAYNAKLAR:
+{source_text}
 
-        # 3. Gemini LLM ile yanıt üret
+### SORU:
+{question}
+
+### YANIT (lütfen kaynak numarasıyla birlikte yanıtla):
+"""
+
+        # 4. Gemini modelinden yanıt al
         llm = get_llm()
         response = llm.generate_content(prompt)
         answer = response.text
 
-        # 4. Sonuçları göster
+        # 5. Yanıtı göster
         st.success("📘 Cevap:")
-        st.markdown(answer)  # st.write yerine markdown, link/numara içeriği destekler
+        st.markdown(answer)
 
-        # 5. Kullanılan belgeleri göster
-        with st.expander("🔎 Kullanılan belgeler"):
+        # 6. Kaynakları ayrı alanda göster
+        with st.expander("🔎 Kullanılan kaynaklar"):
             for i, doc in enumerate(docs):
                 st.markdown(f"**[{i+1}] Kaynak:** {doc.metadata['source'].title()}")
                 st.write(doc.page_content[:300] + "...")
 
-    # === Geçmiş soruları sakla === 
-    if "history" not in st.session_state:
-        st.session_state["history"] = []
+        # 7. Geçmişi güncelle
+        if "history" not in st.session_state:
+            st.session_state["history"] = []
+        st.session_state["history"].append((question, answer))
 
-    st.session_state["history"].append((question, answer))
-
+# 8. Geçmiş soruları göster
+if "history" in st.session_state and st.session_state["history"]:
     st.markdown("### 🕓 Geçmiş Sorular")
     for q, a in reversed(st.session_state["history"][-5:]):
         st.markdown(f"**Soru:** {q}")
         st.markdown(f"**Yanıt:** {a}")
-
-
-

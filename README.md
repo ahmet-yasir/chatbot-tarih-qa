@@ -146,8 +146,6 @@ Komut çalıştırıldıktan sonra tarayıcınızda otomatik olarak bir arayüz 
 
 Aşağıda uygulamanın çalışma örneğini görebilirsiniz:
 
-### Ekran Görüntüsü
-
 ![Chatbot Ekran Görüntüsü](screenshots/ornek.png)
 
 > Görselde, kullanıcı tarafından yazılan soruya sistemin Wikipedia kaynaklarıyla nasıl yanıt verdiği gösterilmektedir.

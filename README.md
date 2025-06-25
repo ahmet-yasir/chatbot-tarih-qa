@@ -140,3 +140,13 @@ Tüm kurulumlar tamamlandıktan ve vektör veritabanı oluşturulduktan sonra, S
 streamlit run app/streamlit_app.py
 ```
 Komut çalıştırıldıktan sonra tarayıcınızda otomatik olarak bir arayüz açılır. Bu arayüz üzerinden sorularınızı sorabilirsiniz.
+
+## 🧪 Örnek Kullanım
+
+Aşağıda uygulamanın çalışma örneğini görebilirsiniz:
+
+### 🖼️ Ekran Görüntüsü
+
+![Chatbot Ekran Görüntüsü](screenshots/ornek.png)
+
+> Görselde, kullanıcı tarafından yazılan soruya sistemin Wikipedia kaynaklarıyla nasıl yanıt verdiği gösterilmektedir.

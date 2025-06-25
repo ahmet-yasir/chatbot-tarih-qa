@@ -6,7 +6,7 @@ def get_llm():
     genai.configure(api_key=api_key)
 
     generation_config = genai.types.GenerationConfig(
-        temperature=0.4,  # 🔥 Burayı değiştirerek yaratıcı ya da tutarlı yanıtlar alabilirsin
+        temperature=0.4,  
         max_output_tokens=512,
         top_p=0.8,
         top_k=10

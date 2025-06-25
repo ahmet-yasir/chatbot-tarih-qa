@@ -114,7 +114,7 @@ Zaman kazanmak için önceden hazırlanmış .jsonl formatındaki Cumhuriyet tar
 ### Hazır JSONL Veri Seti - Kaggle
 Zaman kazanmak için önceden hazırlanmış .jsonl formatındaki Cumhuriyet tarihi veri setini doğrudan indirebilirsiniz.
 
-📦 <a href="https://www.kaggle.com/datasets/ayasir/cumhuriyet-tarihi-belgeleri" target="_blank">Hazır JSONL veri seti - Kaggle</a>
+<a href="https://www.kaggle.com/datasets/ayasir/cumhuriyet-tarihi-belgeleri" target="_blank">Hazır JSONL veri seti - Kaggle</a>
 
 İndirdikten sonra data/extracted/ klasörüne yerleştirmeniz yeterlidir:
 

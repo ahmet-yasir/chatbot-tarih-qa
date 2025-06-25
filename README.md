@@ -1,4 +1,4 @@
- 🇹🇷 Cumhuriyet Tarihi Chatbotu
+ # 🇹🇷 Cumhuriyet Tarihi Chatbotu
 
 Bu proje, Türkiye Cumhuriyeti tarihi hakkında sorulan sorulara **Wikipedia verileri** üzerinden cevap verebilen, **RAG (Retrieval-Augmented Generation)** tabanlı bir yapay zeka sohbet botudur.
 

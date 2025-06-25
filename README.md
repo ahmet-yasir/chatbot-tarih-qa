@@ -1,33 +1,43 @@
-# 📜 Türkçe Tarih Chatbot
+ 🇹🇷 Cumhuriyet Tarihi Chatbotu
 
-Bu proje, Türkçe Wikipedia’dan elde edilen içeriklere dayanarak tarih sorularına yanıt verebilen yapay zeka destekli bir chatbot geliştirmeyi amaçlamaktadır. Geliştirilen sistem, büyük dil modeli (LLM) olarak Google Gemini’yi kullanır ve belge arama işlemleri için FAISS vektör veritabanı ile entegre edilmiştir. Kullanıcı etkileşimi Streamlit tabanlı bir arayüz üzerinden gerçekleştirilir.
+Bu proje, Türkiye Cumhuriyeti tarihi hakkında sorulan sorulara **Wikipedia verileri** üzerinden cevap verebilen, **RAG (Retrieval-Augmented Generation)** tabanlı bir yapay zeka sohbet botudur.
 
----
-
-## 🎯 Proje Amacı
-
-Amacımız, kullanıcıların Türkçe tarih sorularına Wikipedia verilerine dayalı, kaynak gösteren ve anlamlı yanıtlar almasını sağlamaktır. Bu sistem:
-
-- Wikipedia içeriklerini işleyerek semantik bir belge veritabanı oluşturur.
-- Kullanıcının sorduğu soruya benzer içerikleri bulur.
-- Gemini LLM kullanarak doğal dilde ve kaynak referanslı bir yanıt üretir.
+Streamlit arayüzü üzerinden çalışan sistem; Vikipedi'den alınan Cumhuriyet dönemi içeriklerini kullanarak, kullanıcıdan gelen soruları ilgili paragraflarla eşleştirip **Google Gemini LLM** üzerinden cevap üretir.
 
 ---
 
-## 🧠 Kullanılan Teknolojiler
+## Özellikler
 
-| Teknoloji | Açıklama |
-|----------|----------|
-| **Streamlit** | Web tabanlı kullanıcı arayüzü |
-| **LangChain** | Vektör tabanlı belge arama (FAISS) |
-| **FAISS** | Belge embedding ve semantik arama |
-| **Sentence-Transformers** | HuggingFace modeli ile embedding |
-| **Google Generative AI (Gemini)** | Büyük dil modeliyle cevap üretimi |
-| **dotenv** | Gizli anahtarların yönetimi (.env dosyası) |
+- 🔍 Soruya uygun içerikleri FAISS ile vektör tabanlı arar
+- 🤖 Gemini LLM kullanarak doğal dilde yanıtlar üretir
+- 🇹🇷 Tüm içerikler ve cevaplar Türkçedir
+- 📚 Wikipedia’dan otomatik veri çekme ve işleme sistemi
+- 🧩 Modüler yapı: veri çekme, ön işleme, embedding, sorgulama ayrı ayrı kontrol edilebilir
 
 ---
 
-## 🧩 Kurulum
+##  Proje Yapısı
+chatbot-tarih-qa/
+├── app/
+│ ├── document_loader.py
+│ ├── retriever.py
+│ ├── llm_setup.py
+│ └── streamlit_app.py
+├── build_vector_index.py
+├── scripts/
+│ ├── download_from_wikipedia.py
+│ ├── extract_paragraphs.py
+│ └── convert_txt_to_jsonl.py
+├── data/
+│ ├── raw/
+│ ├── processed/
+│ └── extracted/
+├── vectorstore/
+├── .env
+├── requirements.txt
+└── README.md
+
+##  Kurulum
 
 > ⚠️ **Uyarı:** Bu proje yalnızca **Python 3.10** sürümüyle test edilmiştir.  
 > Daha yeni sürümlerde (örn. Python 3.11 veya 3.12) bazı bağımlılıkların çalışmaması mümkündür.  
@@ -67,35 +77,46 @@ GEMINI_API_KEY=your_gemini_api_key_here
 
 > 🔑 **Not:** Google Gemini API anahtarınızı [Google AI Studio](https://makersuite.google.com/app) üzerinden ücretsiz olarak alabilirsiniz.
 
-## 🗃️ Veri Seti Hazırlama
+##  Veri Seti Hazırlama
 
-### 🔽 Wikipedia Dump İndirme
+Veri seti iki farklı yöntemle elde edilebilir:
 
-Wikipedia verisi [Wikimedia Dumps](https://dumps.wikimedia.org/trwiki/latest/) üzerinden indirilmektedir. Aşağıdaki komutları sırasıyla çalıştırarak veriyi `data/raw/` klasörüne indirebilirsiniz:
+---
+
+### Otomatik Wikipedia'dan Veri Çekme (Script ile)
+
+Bu yöntemde proje içinde bulunan `scripts/` dizisindeki hazır Python betikleri ile Wikipedia’dan doğrudan veriler çekilir ve işlenir.
+
+#### 1. Wikipedia İçeriğini İndir
 
 ```bash
-# data/raw klasörünü oluştur
-mkdir -p data/raw
-
-# Wikipedia verisini indir
-wget -O data/raw/trwiki-latest-pages-articles.xml.bz2 \
-https://dumps.wikimedia.org/trwiki/latest/trwiki-latest-pages-articles.xml.bz2
+python scripts/download_from_wikipedia.py
 ```
-### 🛠️ WikiExtractor ile JSONL Formatına Dönüştürme
+Bu script seçilen Cumhuriyet tarihi başlıkları data/raw/ klasörüne .txt dosyaları olarak kaydeder.
 
-Wikipedia XML dump dosyasını işlemek için [WikiExtractor](https://github.com/attardi/wikiextractor) aracını kullanabilirsiniz. Aşağıdaki adımları takip edin:
+#### 2. Paragrafları Ayıkla
 
-#### Wikipedia verisini işleyin ve çıktı olarak JSONL belgeleri üretin
 ```bash
-wikiextractor \
-  -o ./data/extracted \
-  --json \
-  --processes 4 \
-  --bytes 100M \
-  ./data/raw/trwiki-latest-pages-articles.xml.bz2
+python scripts/extract_paragraphs.py
 ```
-Bu işlem sonucunda data/extracted/ klasöründe .jsonl uzantılı birçok belge dosyası oluşacaktır.
-Bu belgeler, embedding işlemiyle vektör veritabanına dönüştürülerek chatbot sisteminde kullanılacaktır.
+Bu script paragrafları çıkarır ve data/processed/rag_paragraflar.txt dosyasına yazar.
+
+#### 3. JSONL Formatına Dönüştür
+
+```bash
+python scripts/convert_txt_to_jsonl.py
+```
+Bu script ile data/extracted/ klasörüne her paragraf ayrı bir .jsonl satırı olarak kaydedilir.
+
+Yöntem 2: Hazır Veri Seti (Kaggle veya Drive)
+Zaman kazanmak için önceden hazırlanmış .jsonl formatındaki Cumhuriyet tarihi veri setini doğrudan indirebilirsiniz.
+
+### Hazır JSONL Veri Seti - Kaggle
+Zaman kazanmak için önceden hazırlanmış .jsonl formatındaki Cumhuriyet tarihi veri setini doğrudan indirebilirsiniz.
+
+[Hazır JSONL veri seti - Kaggle](https://www.kaggle.com/datasets/ayasir/cumhuriyet-tarihi-belgeleri)
+
+İndirdikten sonra data/extracted/ klasörüne yerleştirmeniz yeterlidir:
 
 ## 🔨 Vektör Veritabanı Oluşturma
 
@@ -111,11 +132,11 @@ Bu komut şunları yapar:
 - sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 modeli ile her belgeyi  vektörleştirir.
 - Vektörleri FAISS kullanarak vectorstore/faiss_index/ klasörüne kaydeder.
 
-## 🖥️ Uygulamanın Başlatılması
+##  Uygulamanın Başlatılması
 
 Tüm kurulumlar tamamlandıktan ve vektör veritabanı oluşturulduktan sonra, Streamlit arayüzünü başlatmak için aşağıdaki komutu çalıştırın:
 
 ```bash
 streamlit run app/streamlit_app.py
 ```
-Komut çalıştırıldıktan sonra tarayıcınızda otomatik olarak bir arayüz açılır. Bu arayüz üzerinden Türkçe tarih sorularınızı sorabilirsiniz.
+Komut çalıştırıldıktan sonra tarayıcınızda otomatik olarak bir arayüz açılır. Bu arayüz üzerinden sorularınızı sorabilirsiniz.

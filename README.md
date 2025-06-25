@@ -118,7 +118,7 @@ Zaman kazanmak için önceden hazırlanmış .jsonl formatındaki Cumhuriyet tar
 
 İndirdikten sonra data/extracted/ klasörüne yerleştirmeniz yeterlidir:
 
-## 🔨 Vektör Veritabanı Oluşturma
+## Vektör Veritabanı Oluşturma
 
 Veriler `.jsonl` formatında hazırlandıktan sonra, embedding (vektörleştirme) işlemi gerçekleştirilir. Bu işlem sonucunda FAISS formatında bir vektör veritabanı oluşturulur.
 

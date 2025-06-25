@@ -83,7 +83,7 @@ Veri seti iki farklı yöntemle elde edilebilir:
 
 ---
 
-### Otomatik Wikipedia'dan Veri Çekme (Script ile)
+### Yöntem 1: Otomatik Wikipedia'dan Veri Çekme (Script ile)
 
 Bu yöntemde proje içinde bulunan `scripts/` dizisindeki hazır Python betikleri ile Wikipedia’dan doğrudan veriler çekilir ve işlenir.
 
@@ -108,7 +108,7 @@ python scripts/convert_txt_to_jsonl.py
 ```
 Bu script ile data/extracted/ klasörüne her paragraf ayrı bir .jsonl satırı olarak kaydedilir.
 
-Yöntem 2: Hazır Veri Seti (Kaggle veya Drive)
+### Yöntem 2: Hazır Veri Seti (Kaggle veya Drive)
 Zaman kazanmak için önceden hazırlanmış .jsonl formatındaki Cumhuriyet tarihi veri setini doğrudan indirebilirsiniz.
 
 ### Hazır JSONL Veri Seti - Kaggle
